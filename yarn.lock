@@ -1542,6 +1542,13 @@
   resolved "https://registry.yarnpkg.com/@types/normalize-package-data/-/normalize-package-data-2.4.0.tgz#e486d0d97396d79beedd0a6e33f4534ff6b4973e"
   integrity sha512-f5j5b/Gf71L+dbqxIpQ4Z2WlmI/mPJ0fOkGGmFgtb6sAu97EPczzbS3/tJKxmcYDj55OX6ssqwDAWOHIYDRDGA==
 
+"@types/on-finished@^2.3.1":
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/@types/on-finished/-/on-finished-2.3.1.tgz#4537f9f2b47b3ba0b92c14a4bcc0f755aeda3484"
+  integrity sha512-mzVYaYcFs5Jd2n/O6uYIRUsFRR1cHyZLRvkLCU0E7+G5WhY0qBDAR5fUCeZbvecYOSh9ikhlesyi2UfI8B9ckQ==
+  dependencies:
+    "@types/node" "*"
+
 "@types/parse-json@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
@@ -2119,6 +2126,11 @@ bindings@^1.5.0:
   integrity sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==
   dependencies:
     file-uri-to-path "1.0.0"
+
+bintrees@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/bintrees/-/bintrees-1.0.1.tgz#0e655c9b9c2435eaab68bf4027226d2b55a34524"
+  integrity sha1-DmVcm5wkNeqraL9AJyJtK1WjRSQ=
 
 body-parser@1.19.0:
   version "1.19.0"
@@ -5500,7 +5512,7 @@ object.values@^1.1.0:
     es-abstract "^1.18.0-next.1"
     has "^1.0.3"
 
-on-finished@~2.3.0:
+on-finished@^2.3.0, on-finished@~2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/on-finished/-/on-finished-2.3.0.tgz#20f1336481b083cd75337992a16971aa2d906947"
   integrity sha1-IPEzZIGwg811M3mSoWlxqi2QaUc=
@@ -5841,6 +5853,13 @@ progress@^2.0.0:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
   integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
+
+prom-client@^13.0.0:
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/prom-client/-/prom-client-13.0.0.tgz#7e883e1c10c2d471258d3acf2d386197ffc819bd"
+  integrity sha512-M7ZNjIO6x+2R/vjSD13yjJPjpoZA8eEwH2Bp2Re0/PvzozD7azikv+SaBtZes4Q1ca/xHjZ4RSCuTag3YZLg1A==
+  dependencies:
+    tdigest "^0.1.1"
 
 prompts@^2.0.1:
   version "2.4.0"
@@ -6803,6 +6822,13 @@ table@^5.2.3:
     lodash "^4.17.14"
     slice-ansi "^2.1.0"
     string-width "^3.0.0"
+
+tdigest@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/tdigest/-/tdigest-0.1.1.tgz#2e3cb2c39ea449e55d1e6cd91117accca4588021"
+  integrity sha1-Ljyyw56kSeVdHmzZEReszKRYgCE=
+  dependencies:
+    bintrees "1.0.1"
 
 terminal-link@^2.0.0:
   version "2.1.1"

@@ -1,35 +1,43 @@
 import { Logger, IPluginMiddleware, IBasicAuth, IStorageManager, PluginOptions } from '@verdaccio/types';
-import { Router, Request, Response, NextFunction, Application } from 'express';
+import { Application } from 'express';
+import { Server, startMetricsServer } from './metricsServer';
+import * as MetricCollectors from './metrics/index';
 
-import { CustomConfig } from '../types/index';
+import { MetricsConfig } from '../types/index';
 
-export default class VerdaccioMiddlewarePlugin implements IPluginMiddleware<CustomConfig> {
+export default class VerdaccioMiddlewarePlugin implements IPluginMiddleware<MetricsConfig> {
   public logger: Logger;
-  public foo: string;
-  public constructor(config: CustomConfig, options: PluginOptions<CustomConfig>) {
-    this.foo = config.foo !== undefined ? config.strict_ssl : true;
+  public server: Server;
+  public constructor(private config: MetricsConfig, options: PluginOptions<MetricsConfig>) {
+    this.server = startMetricsServer({
+      port: config.metrics_port,
+      defaultLabels: config.default_labels,
+    })
     this.logger = options.logger;
   }
 
   public register_middlewares(
     app: Application,
-    auth: IBasicAuth<CustomConfig>,
     /* eslint @typescript-eslint/no-unused-vars: off */
-    _storage: IStorageManager<CustomConfig>
-  ): void {g
-    /**
-     * This is just an example of implementation
-    // eslint new-cap:off
-      const router = Router();
-      router.post(
-        '/custom-endpoint',
-        (req: Request, res: Response & { report_error?: Function }, next: NextFunction): void => {
-          const encryptedString = auth.aesEncrypt(Buffer.from(this.foo, 'utf8'));
-          res.setHeader('X-Verdaccio-Token-Plugin', encryptedString.toString());
-          next();
-        }
-      );
-      app.use('/-/npm/something-new', router);
-    */
+    auth: IBasicAuth<MetricsConfig>,
+    _storage: IStorageManager<MetricsConfig>
+  ): void {
+
+    if (this.config.collect_database) {
+      MetricCollectors.collectDatabaseMetrics(_storage);
+    }
+
+    if (this.config.collect_http != false) {
+      app.use(MetricCollectors.setupRequestInterceptor());
+    }
+
+    if (this.config.collect_runtime) {
+      MetricCollectors.collectRuntimeMetrics();
+    }
+
+    if (this.config.collect_up) {
+      MetricCollectors.collectUpMetrics();
+    }
+
   }
 }
