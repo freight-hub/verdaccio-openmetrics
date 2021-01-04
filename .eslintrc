@@ -1,3 +1,6 @@
 {
-  "extends": ["@verdaccio"]
+  "extends": ["@verdaccio"],
+  "rules": {
+    "new-cap": ["error", { "capIsNewExceptions": ["Router"] }]
+  }
 }

@@ -31,8 +31,8 @@ jobs:
           name: Build project
           command: yarn run build
       - run:
-          name: Lint without asserting
-          command: yarn lint || true
+          name: Lint source code
+          command: yarn lint
       - run:
           name: Run tests
           command: yarn test

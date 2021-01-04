@@ -2,15 +2,12 @@
 // https://github.com/jochen-schweizer/express-prom-bundle/blob/master/src/index.js
 
 import onFinished from 'on-finished';
-import { Registry, Histogram } from "prom-client";
+import { Registry, Histogram } from 'prom-client';
 import { Request, Response, NextFunction } from 'express';
 
 type RequestMiddleware = (req: Request, res: Response, next: NextFunction) => void;
 
-export function setupRequestInterceptor(
-  registry: Registry,
-): RequestMiddleware {
-
+export function setupRequestInterceptor(registry: Registry): RequestMiddleware {
   const httpMetricName = 'http_request_duration_seconds';
   const labels = ['status_code', 'method'];
   const httpMetric = new Histogram({
@@ -21,8 +18,7 @@ export function setupRequestInterceptor(
     registers: [registry],
   });
 
-  return function (req, res, next) {
-
+  return function(req, res, next): void {
     // const path = req.originalUrl || req.url;
     // if (opts.excludeRoutes && matchVsRegExps(path, opts.excludeRoutes)) {
     //   return next();
@@ -31,10 +27,9 @@ export function setupRequestInterceptor(
     const labels: Record<string, string> = {};
     const timer = httpMetric.startTimer(labels);
 
-    onFinished(res, () => {
+    onFinished(res, (): void => {
       labels.status_code = res.statusCode.toFixed(0);
       labels.method = req.method;
-      console.log('---', res.getHeaderNames());
       timer();
     });
 

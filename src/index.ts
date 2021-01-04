@@ -2,17 +2,17 @@ import { Logger, IPluginMiddleware, IBasicAuth, IStorageManager, PluginOptions }
 import { Application } from 'express';
 import { Registry } from 'prom-client';
 
-import { MetricsConfig } from '../types/index';
+import { MetricsConfig } from './types/index';
 import { MetricsServer } from './metricsServer';
-import * as MetricCollectors from './metrics/index';
 import { createMetricsRoute } from './metricsRoute';
+import * as MetricCollectors from './metrics/index';
 
 export { MetricsConfig };
 
 export default class VerdaccioOpenmetricsPlugin implements IPluginMiddleware<MetricsConfig> {
   public logger: Logger;
   public server?: MetricsServer;
-  public registry = new Registry;
+  public registry = new Registry();
   public constructor(private config: MetricsConfig, options: PluginOptions<MetricsConfig>) {
     if (config.default_labels) {
       this.registry.setDefaultLabels(config.default_labels);
@@ -32,7 +32,6 @@ export default class VerdaccioOpenmetricsPlugin implements IPluginMiddleware<Met
     auth: IBasicAuth<MetricsConfig>,
     _storage: IStorageManager<MetricsConfig>
   ): void {
-
     // Optionally expose metrics on the main API surface
     if (this.config.metrics_on_main) {
       app.use('/-/metrics', createMetricsRoute(this.registry));
@@ -55,6 +54,5 @@ export default class VerdaccioOpenmetricsPlugin implements IPluginMiddleware<Met
     if (this.config.collect_up) {
       MetricCollectors.collectUpMetrics(this.registry);
     }
-
   }
 }

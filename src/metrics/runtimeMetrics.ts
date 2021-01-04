@@ -1,3 +1,1 @@
-export {
-  collectDefaultMetrics as collectRuntimeMetrics,
-} from 'prom-client';
+export { collectDefaultMetrics as collectRuntimeMetrics } from 'prom-client';
