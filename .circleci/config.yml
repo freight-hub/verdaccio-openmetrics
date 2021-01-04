@@ -1,0 +1,46 @@
+version: '2.1'
+
+executors:
+  node_lts:
+    docker:
+      - image: circleci/node:12
+
+aliases:
+  - &yarn_cache_key
+    yarn-sha-{{ checksum "yarn.lock" }}
+
+jobs:
+  test:
+    executor: node_lts
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: *yarn_cache_key
+      - run:
+          name: Install dependencies
+          command: yarn install --immutable
+      - save_cache:
+          key: *yarn_cache_key
+          paths:
+            - ~/.yarn
+            - ~/.cache/yarn
+            - node_modules
+
+      - run:
+          name: Build project
+          command: yarn run build
+      - run:
+          name: Lint without asserting
+          command: yarn lint || true
+      - run:
+          name: Run tests
+          command: yarn test
+      - store_artifacts:
+          path: ./coverage/lcov.info
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - test
