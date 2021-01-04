@@ -1,13 +1,13 @@
-import * as promClient from "prom-client";
+import { Registry, Gauge } from "prom-client";
 
 export function collectUpMetrics(
-  registry = promClient.register,
+  registry: Registry,
 ) {
 
-  const up = new promClient.Gauge({
+  const up = new Gauge({
     name: 'up',
     help: '1 = up, anything else = not up',
-    registers: [registry]
+    registers: [registry],
   });
   up.set(1);
 

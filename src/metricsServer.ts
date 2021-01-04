@@ -1,48 +1,31 @@
-import { register, collectDefaultMetrics } from 'prom-client'
+import { register, Registry } from 'prom-client'
 import { createServer, IncomingMessage, Server, ServerResponse } from 'http'
 import { AddressInfo } from 'net'
-export { Server }
 
-type Callback = (port: number) => void
+export class MetricsServer {
+  constructor(
+    public registry: Registry,
+  ) {}
+  public httpServer = createServer(this.responseHandler.bind(this));
 
-const DEFAULT_PORT = 9090
+  async listen(port = 9090) {
+    if (this.httpServer.listening) throw new Error(`Already listening`);
+    await new Promise<void>(ok => this.httpServer.listen(port, ok));
+    return (this.httpServer.address() as AddressInfo).port;
+  }
+  close() {
+    if (!this.httpServer) return;
+    this.httpServer.close();
+  }
 
-export type MetricsServerConfig = {
-    /**
-     * Port where the metrics server should be listening on.
-     * Defaults to 9090.
-     */
-    port?: number
-
-    /**
-     * Sets static labels to every metric emitted through the default registry, as name/value pairs:
-     * { defaultLabel: "value", anotherLabel: "value 2" }
-     */
-    defaultLabels?: Object
-}
-
-export function startMetricsServer(config: MetricsServerConfig, callback?: Callback): Server
-export function startMetricsServer(callback?: Callback): Server
-export function startMetricsServer(configOrCallback?: MetricsServerConfig | Callback, cb?: Callback): Server {
-    const config = typeof configOrCallback === 'object' ? configOrCallback : {}
-    const callback = typeof configOrCallback === 'function' ? configOrCallback : cb
-
-    const { port = DEFAULT_PORT, defaultLabels = {} } = config
-
-    register.setDefaultLabels(defaultLabels)
-    const server = createServer(responseHandler).listen(port, () => {
-        const serverPort = (server.address() as AddressInfo).port
-        callback?.(serverPort)
-    })
-    return server
-}
-
-function responseHandler(req: IncomingMessage, res: ServerResponse) {
+  async responseHandler(req: IncomingMessage, res: ServerResponse) {
     if (req.url === '/metrics') {
-        res.setHeader('content-type', register.contentType)
-        register.metrics().then(data => res.end(data))
-    } else {
-        res.statusCode = 404
-        res.end()
+      res.setHeader('content-type', this.registry.contentType);
+      res.end(await this.registry.metrics());
+      return;
     }
+
+    res.statusCode = 404;
+    res.end();
+  }
 }
