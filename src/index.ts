@@ -13,6 +13,8 @@ export default class VerdaccioOpenmetricsPlugin implements IPluginMiddleware<Met
   public logger: Logger;
   public server?: MetricsServer;
   public registry = new Registry();
+  public ready?: Promise<number>;
+  public closables: Array<() => void> = [];
   public constructor(private config: MetricsConfig, options: PluginOptions<MetricsConfig>) {
     if (config.default_labels) {
       this.registry.setDefaultLabels(config.default_labels);
@@ -23,7 +25,8 @@ export default class VerdaccioOpenmetricsPlugin implements IPluginMiddleware<Met
     // Still enable exposing both by specifying both options
     if (!config.metrics_on_main || config.metrics_port) {
       this.server = new MetricsServer(this.registry);
-      this.server.listen(config.metrics_port);
+      this.ready = this.server.listen(config.metrics_port);
+      this.closables.push(() => this.server?.close());
     }
   }
 
@@ -40,7 +43,8 @@ export default class VerdaccioOpenmetricsPlugin implements IPluginMiddleware<Met
     // The different metrics we can collect:
 
     if (this.config.collect_database) {
-      MetricCollectors.collectDatabaseMetrics(_storage, this.registry);
+      const cancel = MetricCollectors.collectDatabaseMetrics(_storage, this.registry);
+      this.closables.push(cancel);
     }
 
     if (this.config.collect_http != false) {
@@ -54,5 +58,12 @@ export default class VerdaccioOpenmetricsPlugin implements IPluginMiddleware<Met
     if (this.config.collect_up) {
       MetricCollectors.collectUpMetrics(this.registry);
     }
+  }
+
+  public close(): void {
+    for (const closable of this.closables) {
+      closable();
+    }
+    this.closables.length = 0;
   }
 }

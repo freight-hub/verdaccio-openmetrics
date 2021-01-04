@@ -3,7 +3,7 @@ import { Registry, Gauge } from 'prom-client';
 
 import { MetricsConfig } from '../types';
 
-export function collectDatabaseMetrics(storage: IStorageManager<MetricsConfig>, registry: Registry): void {
+export function collectDatabaseMetrics(storage: IStorageManager<MetricsConfig>, registry: Registry): () => void {
   // TODO: add more metrics for the local database
 
   const packageVersionsName = 'database_package_versions_count';
@@ -23,6 +23,7 @@ export function collectDatabaseMetrics(storage: IStorageManager<MetricsConfig>, 
     });
   }
 
-  setTimeout(reportDatabaseGauges, 5000);
-  setInterval(reportDatabaseGauges, 60 * 60 * 1000); // hourly
+  setTimeout(reportDatabaseGauges, 500);
+  const timer = setInterval(reportDatabaseGauges, 60 * 60 * 1000); // hourly
+  return (): void => clearInterval(timer);
 }

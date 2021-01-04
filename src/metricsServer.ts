@@ -9,17 +9,15 @@ export class MetricsServer {
   }
   private httpServer: Server;
 
-  public async listen(port = 9090): Promise<number> {
+  public listen(port = 9090): Promise<number> {
     if (this.httpServer.listening) {
       throw new Error(`Already listening`);
     }
-    await new Promise<void>(ok => this.httpServer.listen(port, ok));
-    return (this.httpServer.address() as AddressInfo).port;
+    return new Promise<void>(ok => this.httpServer.listen(port, ok)).then(
+      () => (this.httpServer.address() as AddressInfo).port
+    );
   }
   public close(): void {
-    if (!this.httpServer) {
-      return;
-    }
     this.httpServer.close();
   }
 
