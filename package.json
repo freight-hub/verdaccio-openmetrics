@@ -39,6 +39,9 @@
     "verdaccio",
     "verdaccio-plugin"
   ],
+  "release": {
+    "branches": ["main"]
+  },
   "publishConfig": {
     "access": "public"
   },

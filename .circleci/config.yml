@@ -68,22 +68,24 @@ jobs:
             - node_modules
 
       - add_ssh_keys:
-            fingerprints:
-                - "ef:b9:18:2b:4e:2f:26:2b:fb:c3:f1:25:a1:ca:30:88"
+          fingerprints:
+              - "ef:b9:18:2b:4e:2f:26:2b:fb:c3:f1:25:a1:ca:30:88"
       - run:
-            name: Set git user.
-            command: |
-                git config user.email devops@freighthub.com
-                git config user.name FreightBot
-                mkdir -p ~/.ssh
-                ssh-keyscan github.com >> ~/.ssh/known_hosts
+          name: Set git user.
+          command: |
+            git config user.email devops@freighthub.com
+            git config user.name FreightBot
+            mkdir -p ~/.ssh
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
       - run:
-            name: Set .npmrc
-            command: |
-                echo "always-auth=true" > .npmrc
-                echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
+          name: Set .npmrc
+          command: |
+            echo "always-auth=true" > .npmrc
+            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
 
-      - run: npx semantic-release@v17.3.1
+      - run:
+          name: Do release
+          command: npx semantic-release@v17.3.1
 
 workflows:
   version: 2
