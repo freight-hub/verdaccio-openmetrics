@@ -1,5 +1,8 @@
 version: '2.1'
 
+orbs:
+  circleci-cli: circleci/circleci-cli@0.1.8
+
 executors:
   node_lts:
     docker:
@@ -39,8 +42,20 @@ jobs:
       - store_artifacts:
           path: ./coverage/lcov.info
 
+  validate-ci-config:
+    executor: circleci-cli/default
+    steps:
+      - checkout
+      - run:
+          name: Validate CircleCI config
+          command: circleci config validate
+
 workflows:
   version: 2
   build:
     jobs:
       - test
+      - validate-ci-config:
+          filters:
+            branches:
+              ignore: master
