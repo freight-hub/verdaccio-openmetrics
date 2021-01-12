@@ -1,6 +1,6 @@
 {
-  "name": "verdaccio-openmetrics",
-  "version": "0.0.1",
+  "name": "@freighthub/verdaccio-openmetrics",
+  "version": "0.1.0",
   "description": "Exposes an OpenMetrics/Prometheus endpoint with health and traffic metrics",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -35,9 +35,11 @@
   },
   "keywords": [
     "openmetrics",
-    "verdaccio-"
+    "prometheus",
+    "verdaccio",
+    "verdaccio-plugin"
   ],
-  "license": "MIT",
+  "license": "UNLICENSED",
   "repository": "freight-hub/verdaccio-openmetrics",
   "author": "Daniel Lamando <daniel.lamando@forto.com>",
   "scripts": {
