@@ -93,12 +93,12 @@ workflows:
       - validate-ci-config:
           filters:
             branches:
-              ignore: master
+              ignore: main
       - release:
           context:
           - registry
           filters:
             branches:
-              only: master
+              only: main
           requires:
             - test
