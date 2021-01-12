@@ -39,7 +39,10 @@
     "verdaccio",
     "verdaccio-plugin"
   ],
-  "license": "UNLICENSED",
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
   "repository": "freight-hub/verdaccio-openmetrics",
   "author": "Daniel Lamando <daniel.lamando@forto.com>",
   "scripts": {
