@@ -67,6 +67,10 @@ jobs:
             - ~/.cache/yarn
             - node_modules
 
+      - run:
+          name: Build project
+          command: yarn run build
+
       - add_ssh_keys:
           fingerprints:
               - "ef:b9:18:2b:4e:2f:26:2b:fb:c3:f1:25:a1:ca:30:88"
