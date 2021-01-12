@@ -1,9 +1,12 @@
 version: '2.1'
 
+orbs:
+  circleci-cli: circleci/circleci-cli@0.1.8
+
 executors:
   node_lts:
     docker:
-      - image: circleci/node:12
+      - image: cimg/node:12.20
 
 aliases:
   - &yarn_cache_key
@@ -39,8 +42,63 @@ jobs:
       - store_artifacts:
           path: ./coverage/lcov.info
 
+  validate-ci-config:
+    executor: circleci-cli/default
+    steps:
+      - checkout
+      - run:
+          name: Validate CircleCI config
+          command: circleci config validate
+
+  release:
+    executor: node_lts
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: *yarn_cache_key
+      - run:
+          name: Install dependencies
+          command: yarn install --immutable
+      - save_cache:
+          key: *yarn_cache_key
+          paths:
+            - ~/.yarn
+            - ~/.cache/yarn
+            - node_modules
+
+      - add_ssh_keys:
+            fingerprints:
+                - "ef:b9:18:2b:4e:2f:26:2b:fb:c3:f1:25:a1:ca:30:88"
+      - run:
+            name: Set git user.
+            command: |
+                git config user.email devops@freighthub.com
+                git config user.name FreightBot
+                mkdir -p ~/.ssh
+                ssh-keyscan github.com >> ~/.ssh/known_hosts
+      - run:
+            name: Set .npmrc
+            command: |
+                echo "always-auth=true" > .npmrc
+                echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
+
+      - run: npx semantic-release@v17.3.1
+
 workflows:
   version: 2
   build:
     jobs:
       - test
+      - validate-ci-config:
+          filters:
+            branches:
+              ignore: master
+      - release:
+          context:
+          - registry
+          filters:
+            branches:
+              only: master
+          requires:
+            - test
