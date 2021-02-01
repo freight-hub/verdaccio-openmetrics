@@ -1,4 +1,4 @@
-# @freighthub/verdaccio-openmetrics
+# verdaccio-openmetrics
 
 > Verdaccio plugin exposing an OpenMetrics/Prometheus endpoint with health and traffic metrics
 
@@ -21,28 +21,21 @@ There's also an option to collect NodeJS runtime metrics
 A further option will be to infrequently collect statistics about the database,
   however it's not clear yet what will be interesting to expose there.
 
-## plugin name
-
-Note that this Verdaccio plugin is published within a package scope.
-To load the plugin from a Verdaccio config, specify the full name:
-
-```yaml
-middlewares:
-  '@freighthub/verdaccio-openmetrics':
-    enabled: true
-```
-
-This works around the automatic `verdaccio-` prefix that Verdaccio expects.
-
 ## config
 
 If no extra config is given, HTTP request metrics will be exposed at `:9090/metrics`.
+
+```yaml
+middlewares:
+  openmetrics:
+    enabled: true
+```
 
 If you want additional metrics, for example runtime and database metrics:
 
 ```yaml
 middlewares:
-  '@freighthub/verdaccio-openmetrics':
+  openmetrics:
     enabled: true
     collect_runtime: true
     collect_database: true

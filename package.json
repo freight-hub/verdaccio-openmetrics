@@ -1,5 +1,5 @@
 {
-  "name": "@freighthub/verdaccio-openmetrics",
+  "name": "verdaccio-openmetrics",
   "version": "0.1.0",
   "description": "Verdaccio plugin exposing an OpenMetrics/Prometheus endpoint with health and traffic metrics",
   "main": "lib/index.js",
