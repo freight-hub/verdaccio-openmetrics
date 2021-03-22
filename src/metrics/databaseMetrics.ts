@@ -45,22 +45,23 @@ async function* iterateLocalDatabase(
 }
 
 export function collectDatabaseMetrics(storage: IStorageManager<MetricsConfig>, registry: Registry): () => void {
+  // We delay registering these metrics until they have their first datapoint
+  let isRegistered = false;
+
   const packageCount = new Gauge({
     name: 'database_packages_count',
     help: 'number of local packages in local database',
-    registers: [registry],
+    registers: [],
   });
-
   const packageVersionsCount = new Gauge({
     name: 'database_versions_count',
     help: 'number of local versions in local database across all packages',
-    registers: [registry],
+    registers: [],
   });
-
   const maxVersionsCount = new Gauge({
     name: 'database_max_package_versions_count',
     help: 'highest number of versions associated with a single local package',
-    registers: [registry],
+    registers: [],
   });
 
   async function reportDatabaseGauges(): Promise<void> {
@@ -77,6 +78,13 @@ export function collectDatabaseMetrics(storage: IStorageManager<MetricsConfig>, 
       packageCount.set(allPackages);
       packageVersionsCount.set(allVersions);
       maxVersionsCount.set(mostVersions);
+
+      if (!isRegistered) {
+        registry.registerMetric(packageCount);
+        registry.registerMetric(packageVersionsCount);
+        registry.registerMetric(maxVersionsCount);
+        isRegistered = true;
+      }
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(`WARN: Failed to collect database metrics due to`, err.stack);
@@ -86,7 +94,7 @@ export function collectDatabaseMetrics(storage: IStorageManager<MetricsConfig>, 
     }
   }
 
-  setTimeout(reportDatabaseGauges, 500);
+  setTimeout(reportDatabaseGauges, 5 * 1000); // first run a few seconds after startup
   const unstampede = Math.round(Math.random() * 5 * 60 * 1000); // up to 5 minutes late ...
   const timer = setInterval(reportDatabaseGauges, 60 * 60 * 1000 + unstampede); // ... hourly
   return (): void => clearInterval(timer);
