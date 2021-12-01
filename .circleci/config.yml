@@ -1,4 +1,4 @@
-version: '2.1'
+version: 2.1
 
 orbs:
   circleci-cli: circleci/circleci-cli@0.1.8
@@ -6,7 +6,7 @@ orbs:
 executors:
   node_lts:
     docker:
-      - image: cimg/node:12.20
+      - image: cimg/node:16.13
 
 aliases:
   - &yarn_cache_key
@@ -89,7 +89,7 @@ jobs:
 
       - run:
           name: Do release
-          command: npx semantic-release@v17.3.1
+          command: npx semantic-release@v18.0.1
 
 workflows:
   version: 2
