@@ -35,9 +35,14 @@ async function* iterateLocalDatabase(
   // do the async fetching loop
   const packageList = await getPkgList();
   for (const packageName of packageList) {
-    const packageMeta = await getPkgMetadata(packageName);
-    if (packageMeta) {
-      yield packageMeta;
+    try {
+      const packageMeta = await getPkgMetadata(packageName);
+      if (packageMeta) {
+        yield packageMeta;
+      }
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(`WARN: Failed to fetch local package "${packageName}" for database metrics`);
     }
   }
 
