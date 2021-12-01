@@ -28,7 +28,7 @@
     "@verdaccio/types": "^10",
     "eslint": "^7",
     "jest": "^26",
-    "node-fetch": "^3",
+    "node-fetch": "^2",
     "prettier": "^1.19.1",
     "standard-version": "^8",
     "typescript": "^4"
