@@ -86,8 +86,9 @@ export function collectDatabaseMetrics(storage: IStorageManager<MetricsConfig>, 
         isRegistered = true;
       }
     } catch (err) {
+      const stack = (err as Error).stack || `${err}`;
       // eslint-disable-next-line no-console
-      console.error(`WARN: Failed to collect database metrics due to`, err.stack);
+      console.error(`WARN: Failed to collect database metrics due to`, stack);
       packageCount.reset();
       packageVersionsCount.reset();
       maxVersionsCount.reset();
