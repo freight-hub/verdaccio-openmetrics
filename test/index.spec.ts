@@ -7,18 +7,18 @@ import fetch from 'node-fetch';
 import OpenMetrics, { MetricsConfig } from '../src/index';
 
 // There's a bunch of other unrelated fields so we have to cast this
-const config: MetricsConfig = ({
+const config: MetricsConfig = {
   enabled: true,
-} as unknown) as MetricsConfig;
+} as unknown as MetricsConfig;
 
 const logger: Logger = {
-  error: e => console.warn(e),
-  info: e => console.warn(e),
-  debug: e => console.warn(e),
-  child: e => console.warn(e),
-  warn: e => console.warn(e),
-  http: e => console.warn(e),
-  trace: e => console.warn(e),
+  error: (e) => console.warn(e),
+  info: (e) => console.warn(e),
+  debug: (e) => console.warn(e),
+  child: (e) => console.warn(e),
+  warn: (e) => console.warn(e),
+  http: (e) => console.warn(e),
+  trace: (e) => console.warn(e),
 };
 
 describe('OpenMetrics plugin', () => {
@@ -63,7 +63,7 @@ describe('OpenMetrics plugin', () => {
     const app = express();
     plugin.register_middlewares(app, null, null);
 
-    const server = await new Promise<Server>(ok => {
+    const server = await new Promise<Server>((ok) => {
       const srv = app.listen(() => ok(srv));
     });
     const srvAddr = server.address();
@@ -97,7 +97,7 @@ describe('OpenMetrics plugin', () => {
     const app = express();
     plugin.register_middlewares(app, null, null);
 
-    const server = await new Promise<Server>(ok => {
+    const server = await new Promise<Server>((ok) => {
       const srv = app.listen(() => ok(srv));
     });
     const srvAddr = server.address();

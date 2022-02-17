@@ -13,7 +13,7 @@ export class MetricsServer {
     if (this.httpServer.listening) {
       throw new Error(`Already listening`);
     }
-    return new Promise<void>(ok => this.httpServer.listen(port, ok)).then(
+    return new Promise<void>((ok) => this.httpServer.listen(port, ok)).then(
       () => (this.httpServer.address() as AddressInfo).port
     );
   }
