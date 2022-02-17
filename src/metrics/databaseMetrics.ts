@@ -36,7 +36,7 @@ async function* iterateLocalDatabase(
   const packageList = await getPkgList();
   for (const packageName of packageList) {
     // handle missing packages: https://github.com/freight-hub/verdaccio-openmetrics/issues/7
-    const packageMeta = await getPkgMetadata(packageName).catch(err => {
+    const packageMeta = await getPkgMetadata(packageName).catch((err) => {
       const reason = (err as Error).message || `${err}`;
       // eslint-disable-next-line no-console
       console.error(`WARN: Failed to fetch local package "${packageName}" for database metrics: ${reason}`);

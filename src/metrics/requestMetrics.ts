@@ -18,7 +18,7 @@ export function setupRequestInterceptor(registry: Registry): RequestMiddleware {
     registers: [registry],
   });
 
-  return function(req, res, next): void {
+  return function (req, res, next): void {
     // const path = req.originalUrl || req.url;
     // if (opts.excludeRoutes && matchVsRegExps(path, opts.excludeRoutes)) {
     //   return next();
