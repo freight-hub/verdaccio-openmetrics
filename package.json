@@ -33,6 +33,10 @@
     "prettier": "^2",
     "typescript": "^4"
   },
+  "resolutions": {
+    "chokidar": "^3",
+    "strip-ansi": "^6"
+  },
   "keywords": [
     "openmetrics",
     "prometheus",
