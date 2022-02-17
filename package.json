@@ -20,6 +20,7 @@
     "@types/express": "^4.17.1",
     "@types/jest": "^26",
     "@types/node": "^12.12.5",
+    "@types/node-fetch": "^2.5.7",
     "@types/on-finished": "^2.3.0",
     "@typescript-eslint/eslint-plugin": "^2.12.0",
     "@typescript-eslint/parser": "^2",
@@ -28,7 +29,7 @@
     "@verdaccio/types": "^10",
     "eslint": "^6",
     "jest": "^26",
-    "node-fetch": "^3",
+    "node-fetch": "^2",
     "prettier": "^2",
     "typescript": "^4"
   },
