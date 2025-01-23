@@ -1,3 +1,9 @@
+## Deprecation Notice
+We have switched away from Verdaccio for our own in-house package management.
+Therefore we no longer plan on maintaining this module.
+
+This repository will be archived in 2025. Please reach out with any concerns.
+
 # verdaccio-openmetrics
 
 > Verdaccio plugin exposing an OpenMetrics/Prometheus endpoint with health and traffic metrics
